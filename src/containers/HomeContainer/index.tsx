@@ -17,6 +17,7 @@ import { useEffect } from "react";
 import { Company } from "../../core/models/Company";
 import { getAllShoppingItems } from "../../core/redux/actions/ShoppingActions";
 import { Item } from "../../core/models/Item";
+import * as _ from "lodash";
 
 export interface HomeContainerProps {
   actions: any;
@@ -37,6 +38,11 @@ const HomeContainer: React.FunctionComponent<HomeContainerProps> = (props) => {
   const getAllItems = () => {
     props.actions.getItems();
   };
+
+  function getFlattenTags() {
+    const tags = props.shoppingItems.map((item) => item.tags).flat();
+    return _.uniq(tags);
+  }
 
   const options: Selection[] = [
     {
@@ -127,7 +133,12 @@ const HomeContainer: React.FunctionComponent<HomeContainerProps> = (props) => {
         <FilterSelection
           title="Tags"
           inputPlaceholder="Search tag"
-          options={options}
+          options={getFlattenTags().map((tag,index) => ({
+            id: index,
+            label: tag,
+            shortCode: tag,
+            selected: false,
+          }))}
         />
       </Col>
       <Col
