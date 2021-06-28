@@ -3,12 +3,18 @@ import { Row, Col, Image } from "antd";
 import { Button } from "antd";
 import { Card } from "antd";
 import { Space } from "antd";
-import { Product } from "../../core/models/Product";
 import { Pagination } from "antd";
 import { ProductListLayout } from "./ProductListLayout";
-export interface ProductsProps {}
+import { Item } from "../../core/models/Item";
+import { chunk } from "../../utilities/ArrayUtils";
+import { useState } from "react";
+export interface ProductsProps {
+  items: Item[];
+}
 
-const Products: React.FunctionComponent<ProductsProps> = () => {
+const Products: React.FunctionComponent<ProductsProps> = (props) => {
+  const [page, setPage] = useState(0);
+
   function itemRender(current: number, type: string, originalElement: any) {
     if (type === "prev") {
       return <a style={{ color: "#1ea4ce" }}>Previous</a>;
@@ -19,88 +25,14 @@ const Products: React.FunctionComponent<ProductsProps> = () => {
     return originalElement;
   }
 
-  const products: Product[] = [
-    {
-      id: 1,
-      label: "Georgious office mug",
-      price: 14.99,
-    },
-    {
-      id: 2,
-      label: "Georgious office mug",
-      price: 14.99,
-    },
-    {
-      id: 3,
-      label: "Georgious office mug",
-      price: 14.99,
-    },
-    {
-      id: 4,
-      label: "Georgious office mug",
-      price: 14.99,
-    },
-    {
-      id: 5,
-      label: "Georgious office mug",
-      price: 14.99,
-    },
-    {
-      id: 5,
-      label: "Georgious office mug",
-      price: 14.99,
-    },
-    {
-      id: 5,
-      label: "Georgious office mug",
-      price: 14.99,
-    },
-    {
-      id: 5,
-      label: "Georgious office mug",
-      price: 14.99,
-    },
-    {
-      id: 5,
-      label: "Georgious office mug",
-      price: 14.99,
-    },
-    {
-      id: 5,
-      label: "Georgious office mug",
-      price: 14.99,
-    },
-    {
-      id: 5,
-      label: "Georgious office mug",
-      price: 14.99,
-    },
-    {
-      id: 5,
-      label: "Georgious office mug",
-      price: 14.99,
-    },
-    {
-      id: 5,
-      label: "Georgious office mug",
-      price: 14.99,
-    },
-    {
-      id: 5,
-      label: "Georgious office mug",
-      price: 14.99,
-    },
-    {
-      id: 5,
-      label: "Georgious office mug",
-      price: 14.99,
-    },
-    {
-      id: 5,
-      label: "Georgious office mug",
-      price: 14.99,
-    },
-  ];
+  function getChunkArray(): Item[][] {
+    return chunk(props.items, 16);
+  }
+
+  function sizeChanged(e: any) {
+    setPage(e - 1);
+  }
+
   return (
     <div>
       <Text
@@ -148,7 +80,7 @@ const Products: React.FunctionComponent<ProductsProps> = () => {
         className="site-card-wrapper"
       >
         <ProductListLayout>
-          {products.map((product) => (
+          {getChunkArray()[page]?.map((product) => (
             <Col
               xs={{ span: 12 }}
               sm={{ span: 12 }}
@@ -172,7 +104,7 @@ const Products: React.FunctionComponent<ProductsProps> = () => {
                   <Text style={{ color: "#1ea4ce", fontWeight: "bold" }}>
                     &#8378; {product.price}
                   </Text>
-                  <Text style={{ fontWeight: "bold" }}>{product.label}</Text>
+                  <Text style={{ fontWeight: "bold" }}>{product.name}</Text>
                   <Button
                     block={true}
                     style={{
@@ -193,7 +125,8 @@ const Products: React.FunctionComponent<ProductsProps> = () => {
         <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
           <Pagination
             showSizeChanger={false}
-            total={100}
+            total={getChunkArray()?.length}
+            onChange={sizeChanged}
             itemRender={itemRender}
             style={{ marginBottom: "80px", marginTop: "10px" }}
           />

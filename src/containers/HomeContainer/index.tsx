@@ -10,10 +10,34 @@ import Text from "antd/lib/typography/Text";
 import { Space } from "antd";
 import { Divider } from "antd";
 import Products from "./Products";
+import { bindActionCreators, Dispatch } from "redux";
+import { getAllCompanies } from "../../core/redux/actions/CompanyActions";
+import { connect } from "react-redux";
+import { useEffect } from "react";
+import { Company } from "../../core/models/Company";
+import { getAllShoppingItems } from "../../core/redux/actions/ShoppingActions";
+import { Item } from "../../core/models/Item";
 
-export interface HomeContainerProps {}
+export interface HomeContainerProps {
+  actions: any;
+  companies: Company[];
+  shoppingItems: Item[];
+}
 
-const HomeContainer: React.FunctionComponent<HomeContainerProps> = () => {
+const HomeContainer: React.FunctionComponent<HomeContainerProps> = (props) => {
+  useEffect(() => {
+    getAllCompanies();
+    getAllItems();
+  }, [props.actions]);
+
+  const getAllCompanies = () => {
+    props.actions.getCompanies();
+  };
+
+  const getAllItems = () => {
+    props.actions.getItems();
+  };
+
   const options: Selection[] = [
     {
       id: 1,
@@ -93,7 +117,12 @@ const HomeContainer: React.FunctionComponent<HomeContainerProps> = () => {
         <FilterSelection
           title="Brands"
           inputPlaceholder="Search brand"
-          options={options}
+          options={props?.companies?.map((company, index) => ({
+            id: index,
+            shortCode: company.slug,
+            label: company.name,
+            selected: false,
+          }))}
         />
         <FilterSelection
           title="Tags"
@@ -109,7 +138,7 @@ const HomeContainer: React.FunctionComponent<HomeContainerProps> = () => {
         xl={{ span: 11, offset: 1 }}
         xxl={{ span: 11, offset: 1 }}
       >
-        <Products />
+        <Products items={props.shoppingItems} />
       </Col>
       <Col
         flex="auto"
@@ -200,4 +229,20 @@ const HomeContainer: React.FunctionComponent<HomeContainerProps> = () => {
   );
 };
 
-export default HomeContainer;
+const mapStateToProps = (state: any) => {
+  return {
+    companies: state.company.companies,
+    shoppingItems: state.shoppingItem.items,
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    actions: {
+      getCompanies: bindActionCreators(getAllCompanies, dispatch),
+      getItems: bindActionCreators(getAllShoppingItems, dispatch),
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);
