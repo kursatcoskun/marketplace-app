@@ -40,10 +40,18 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
     originalElement: any
   ) {
     if (type === "prev") {
-      return <a style={{ color: "#1ea4ce" }}>Previous</a>;
+      return (
+        <a href="#0" style={{ color: "#1ea4ce" }}>
+          Previous
+        </a>
+      );
     }
     if (type === "next") {
-      return <a style={{ color: "#1ea4ce" }}>Next</a>;
+      return (
+        <a href="#0" style={{ color: "#1ea4ce" }}>
+          Next
+        </a>
+      );
     }
     return originalElement;
   }
