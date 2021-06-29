@@ -4,6 +4,7 @@ import { LeftBarCard } from "./LeftBarCard";
 import Text from "antd/lib/typography/Text";
 import { Input } from "antd";
 import { Selection } from "../../core/models/Selection";
+import { useState } from "react";
 export interface FilterSelectionProps {
   title: string;
   inputPlaceholder: string;
@@ -13,12 +14,22 @@ export interface FilterSelectionProps {
 const FilterSelection: React.FunctionComponent<FilterSelectionProps> = (
   props
 ) => {
+  const [value, setValue] = useState("");
+
+  const handleChange = (event: any) => {
+    setValue(event.target.value);
+  };
   return (
     <div style={{ marginTop: "24px" }}>
       <Text>{props.title}</Text>
       <LeftBarCard bordered={false} style={{ height: "274px" }}>
         <Row style={{ marginBottom: "20px" }}>
-          <Input size="large" placeholder={props.inputPlaceholder} />
+          <Input
+            value={value}
+            onChange={handleChange}
+            size="large"
+            placeholder={props.inputPlaceholder}
+          />
         </Row>
         <Row>
           <List
@@ -26,7 +37,7 @@ const FilterSelection: React.FunctionComponent<FilterSelectionProps> = (
             itemLayout="horizontal"
             bordered={false}
             split={false}
-            dataSource={props.options}
+            dataSource={props.options.filter((x) => x.label.includes(value))}
             renderItem={(item) => (
               <List.Item>
                 <Checkbox>{item.label}</Checkbox>
