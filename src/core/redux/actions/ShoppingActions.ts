@@ -6,6 +6,7 @@ import { Action } from "../../models/Action";
 import { Item } from "../../models/Item";
 import { ShoppingCart } from "../../models/ShoppingCart";
 import * as _ from "lodash";
+import { Filter } from "../../models/filter";
 export function getAllItemsSuccess(
   res: Item[],
   loading: boolean
@@ -52,11 +53,26 @@ export function productTypes(res: string[]): Action<string[]> {
   };
 }
 
+export function applyBrandFilter(payload: Filter): Action<Filter> {
+  return {
+    type: shoppingActionTypes.APPLY_FILTER,
+    payload,
+  };
+}
+
+export function applyTagFilter(payload: Filter): Action<Filter> {
+  return {
+    type: shoppingActionTypes.APPLY_FILTER,
+    payload,
+  };
+}
+
 export function getAllShoppingItems() {
   return (dispatch: Dispatch) =>
     ShoppingService.getItems()
       .then((res: AxiosResponse) => {
         dispatch(getAllItemsSuccess(res.data, false));
+        console.log(_.uniq(res.data.map((item: Item) => item.itemType)));
         dispatch(
           productTypes(_.uniq(res.data.map((item: Item) => item.itemType)))
         );

@@ -16,13 +16,20 @@ import { ShoppingCart } from "../../core/models/ShoppingCart";
 export interface ProductsProps {
   actions: any;
   items: Item[];
+  productTypes?: string[];
+  selectedProductType?: string;
 }
 
 const Products: React.FunctionComponent<ProductsProps> = (props) => {
   const [page, setPage] = useState(0);
+  const [selectedProductType, setSelectedProductType] = useState("");
 
   const addToCart = (cart: ShoppingCart) => {
     props.actions.addToCart(cart);
+  };
+
+  const clickProductType = (type: string) => {
+    setSelectedProductType(type);
   };
 
   function prevNextButtonsRender(
@@ -40,8 +47,12 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
   }
 
   function getChunkArrayForShoppingItems(): Item[][] {
-    console.log(props);
-    return chunk(props.items, 16);
+    return selectedProductType
+      ? chunk(
+          props.items.filter((x) => x.itemType === selectedProductType),
+          16
+        )
+      : chunk(props.items, 16);
   }
 
   function sizeChanged(page: number) {
@@ -67,28 +78,21 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
           marginTop: "10px",
         }}
       >
-        <Button
-          type="text"
-          style={{
-            backgroundColor: "#1ea4ce",
-            color: "white",
-            cursor: "unset",
-          }}
-        >
-          mug
-        </Button>
-
-        <Button
-          type="text"
-          style={{
-            marginLeft: "10px",
-            backgroundColor: "#F2F0FD",
-            color: "#1ea4ce",
-            cursor: "unset",
-          }}
-        >
-          shirt
-        </Button>
+        {props.productTypes?.map((productType) => (
+          <Button
+            onClick={() => clickProductType(productType)}
+            type="text"
+            style={{
+              marginLeft: "10px",
+              backgroundColor:
+                productType === selectedProductType ? "#1ea4ce" : "#F2F0FD",
+              color: productType === selectedProductType ? "white" : "#1ea4ce",
+              cursor: "unset",
+            }}
+          >
+            {productType}
+          </Button>
+        ))}
       </Row>
       <div
         style={{ backgroundColor: "white", marginTop: "10px" }}
@@ -159,7 +163,9 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
 };
 
 const mapStateToProps = (state: State) => {
-  return {};
+  return {
+    productTypes: state.shoppingItem.productTypes,
+  };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {

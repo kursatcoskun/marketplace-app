@@ -78,6 +78,18 @@ export default function ProjectReducer(
         productTypes: action.payload,
         loading: false,
       };
+    case shoppingActionTypes.APPLY_BRAND_FILTER:
+      return {
+        ...state,
+        selectedBrandFilter: action.payload,
+        loading: false,
+      };
+    case shoppingActionTypes.APPLY_TAG_FILTER:
+      return {
+        ...state,
+        selectedTagFilter: action.payload,
+        loading: false,
+      };
     default:
       return state;
   }

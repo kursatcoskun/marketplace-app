@@ -4,3 +4,5 @@ export const REMOVE_TO_CART = "REMOVE_TO_CART";
 export const LOW_TO_HIGH = "LOW_TO_HIGH";
 export const NEW_TO_OLD = "NEW_TO_OLD";
 export const ADD_PRODUCT_TYPES = "ADD_PRODUCT_TYPES";
+export const APPLY_BRAND_FILTER = "APPLY_BRAND_FILTER";
+export const APPLY_TAG_FILTER = "APPLY_TAG_FILTER";
