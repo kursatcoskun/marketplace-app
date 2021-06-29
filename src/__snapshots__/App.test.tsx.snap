@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App should render initial layout 1`] = `
+Array [
+  <div
+    className="app"
+  >
+    <Memo(Connect(HeaderLayout))
+      title="Market"
+    />
+    <Memo(Connect(HomeContainer)) />
+    <styled.div>
+      ©2019 Market · Privacy Policy
+    </styled.div>
+  </div>,
+]
+`;

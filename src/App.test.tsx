@@ -1,9 +1,13 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import App from './App';
+// MyComponent.test.js
+import { shallow } from "enzyme";
+import App from "./App";
+describe("App", () => {
+  it("should render App", () => {
+    const wrapper = shallow(<App />);
+  });
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText("Market");
-  expect(linkElement).toBeInTheDocument();
+  it("should render initial layout", () => {
+    const component = shallow(<App />);
+    expect(component.getElements()).toMatchSnapshot();
+  });
 });

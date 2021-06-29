@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LeftBarCardComponent should render initial layout 1`] = `
+Array [
+  <Card
+    className="sc-bdnxRM eNTeaF"
+  />,
+]
+`;
