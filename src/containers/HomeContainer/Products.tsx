@@ -29,7 +29,7 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
     return originalElement;
   }
 
-  function getChunkArray(): Item[][] {
+  function getChunkArrayForShoppingItems(): Item[][] {
     return chunk(props.items, 16);
   }
 
@@ -84,7 +84,7 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
         className="site-card-wrapper"
       >
         <ProductListLayout>
-          {getChunkArray()[page]?.map((product) => (
+          {getChunkArrayForShoppingItems()[page]?.map((product) => (
             <Col
               xs={{ span: 12 }}
               sm={{ span: 12 }}
@@ -129,7 +129,7 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
         <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
           <Pagination
             showSizeChanger={false}
-            total={getChunkArray()?.length}
+            total={getChunkArrayForShoppingItems()?.length}
             onChange={sizeChanged}
             itemRender={prevNextButtonsRender}
             style={{ marginBottom: "80px", marginTop: "10px" }}
