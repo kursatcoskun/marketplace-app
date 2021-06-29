@@ -33,8 +33,8 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
     return chunk(props.items, 16);
   }
 
-  function sizeChanged(e: any) {
-    setPage(e - 1);
+  function sizeChanged(page: number) {
+    setPage(page - 1);
   }
 
   return (
