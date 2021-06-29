@@ -13,11 +13,13 @@ import { State } from "../../core/models/State";
 import { addToCart } from "../../core/redux/actions/ShoppingActions";
 import { connect } from "react-redux";
 import { ShoppingCart } from "../../core/models/ShoppingCart";
+import { Filter } from "../../core/models/filter";
 export interface ProductsProps {
   actions: any;
   items: Item[];
   productTypes?: string[];
   selectedProductType?: string;
+  brandSearchFilter?: Filter;
 }
 
 const Products: React.FunctionComponent<ProductsProps> = (props) => {
@@ -46,14 +48,33 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
     return originalElement;
   }
 
-  function getChunkArrayForShoppingItems(): Item[][] {
-    return selectedProductType
-      ? chunk(
-          props.items.filter((x) => x.itemType === selectedProductType),
-          16
+  const getChunkArrayForShoppingItems = (): Item[][] => {
+    let items = props.items;
+    if (selectedProductType) {
+      items = items.filter((x) => x.itemType === selectedProductType);
+    }
+    if (
+      props.brandSearchFilter &&
+      props.brandSearchFilter?.type === "brand" &&
+      props.brandSearchFilter.filters?.length
+    ) {
+      items = items.filter((x) =>
+        props.brandSearchFilter?.filters.includes(x.manufacturer)
+      );
+    }
+    if (
+      props.brandSearchFilter &&
+      props.brandSearchFilter?.type === "tag" &&
+      props.brandSearchFilter.filters?.length
+    ) {
+      items = items.filter((x) =>
+        props.brandSearchFilter?.filters.some((filter) =>
+          x.tags.includes(filter)
         )
-      : chunk(props.items, 16);
-  }
+      );
+    }
+    return chunk(items, 16);
+  };
 
   function sizeChanged(page: number) {
     setPage(page - 1);
@@ -152,6 +173,7 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
           <Pagination
             showSizeChanger={false}
             total={getChunkArrayForShoppingItems()?.length}
+            defaultPageSize={1}
             onChange={sizeChanged}
             itemRender={prevNextButtonsRender}
             style={{ marginBottom: "80px", marginTop: "10px" }}
@@ -165,6 +187,7 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
 const mapStateToProps = (state: State) => {
   return {
     productTypes: state.shoppingItem.productTypes,
+    brandSearchFilter: state.shoppingItem.selectedBrandFilter,
   };
 };
 

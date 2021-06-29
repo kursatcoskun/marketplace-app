@@ -72,7 +72,6 @@ export function getAllShoppingItems() {
     ShoppingService.getItems()
       .then((res: AxiosResponse) => {
         dispatch(getAllItemsSuccess(res.data, false));
-        console.log(_.uniq(res.data.map((item: Item) => item.itemType)));
         dispatch(
           productTypes(_.uniq(res.data.map((item: Item) => item.itemType)))
         );
