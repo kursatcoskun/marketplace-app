@@ -15,7 +15,11 @@ export interface ProductsProps {
 const Products: React.FunctionComponent<ProductsProps> = (props) => {
   const [page, setPage] = useState(0);
 
-  function itemRender(current: number, type: string, originalElement: any) {
+  function prevNextButtonsRender(
+    current: number,
+    type: string,
+    originalElement: any
+  ) {
     if (type === "prev") {
       return <a style={{ color: "#1ea4ce" }}>Previous</a>;
     }
@@ -127,7 +131,7 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
             showSizeChanger={false}
             total={getChunkArray()?.length}
             onChange={sizeChanged}
-            itemRender={itemRender}
+            itemRender={prevNextButtonsRender}
             style={{ marginBottom: "80px", marginTop: "10px" }}
           />
         </Col>
