@@ -45,7 +45,9 @@ const SortingTypeSelection: React.FunctionComponent<SortingTypeSelectionProps> =
     };
     return (
       <div>
-        <Text>{props.title}</Text>
+        <Text style={{ color: "#6F6F6F", fontFamily: "Open Sans" }}>
+          {props.title}
+        </Text>
         <LeftBarCard bordered={false}>
           <Radio.Group onChange={onChange} value={value}>
             <Space direction="vertical">

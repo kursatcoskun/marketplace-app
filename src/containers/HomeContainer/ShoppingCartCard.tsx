@@ -12,5 +12,10 @@ export const ShoppingCartCard: React.FunctionComponent<CardProps> = styled(
   border-radius: 2px;
   @media only screen and (max-width: 800px) {
     flex-direction: column;
+    margin-bottom: 50px;
+  }
+  @media only screen and (max-width: 1024px) {
+    flex-direction: column;
+    margin-bottom: 50px;
   }
 `;

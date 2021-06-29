@@ -76,7 +76,9 @@ const FilterSelection: React.FunctionComponent<FilterSelectionProps> = (
 
   return (
     <div style={{ marginTop: "24px" }}>
-      <Text>{props.title}</Text>
+      <Text style={{ color: "#6F6F6F", fontFamily: "Open Sans" }}>
+        {props.title}
+      </Text>
       <LeftBarCard bordered={false} style={{ height: "274px" }}>
         <Row style={{ marginBottom: "20px" }}>
           <Input
