@@ -55,14 +55,14 @@ export function productTypes(res: string[]): Action<string[]> {
 
 export function applyBrandFilter(payload: Filter): Action<Filter> {
   return {
-    type: shoppingActionTypes.APPLY_FILTER,
+    type: shoppingActionTypes.APPLY_BRAND_FILTER,
     payload,
   };
 }
 
 export function applyTagFilter(payload: Filter): Action<Filter> {
   return {
-    type: shoppingActionTypes.APPLY_FILTER,
+    type: shoppingActionTypes.APPLY_TAG_FILTER,
     payload,
   };
 }
