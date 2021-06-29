@@ -1,0 +1,14 @@
+import { Company } from "./Company";
+import { Item } from "./Item";
+import { ShoppingCart } from "./ShoppingCart";
+
+export interface State {
+  company: {
+    companies: Company[];
+  };
+  shoppingItem: {
+    items: Item[];
+    shoppingCart: ShoppingCart[];
+    productTypes: string[];
+  };
+}

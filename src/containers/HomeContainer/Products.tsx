@@ -8,12 +8,22 @@ import { ProductListLayout } from "./ProductListLayout";
 import { Item } from "../../core/models/Item";
 import { chunk } from "../../utilities/ArrayUtils";
 import { useState } from "react";
+import { bindActionCreators, Dispatch } from "redux";
+import { State } from "../../core/models/State";
+import { addToCart } from "../../core/redux/actions/ShoppingActions";
+import { connect } from "react-redux";
+import { ShoppingCart } from "../../core/models/ShoppingCart";
 export interface ProductsProps {
+  actions: any;
   items: Item[];
 }
 
 const Products: React.FunctionComponent<ProductsProps> = (props) => {
   const [page, setPage] = useState(0);
+
+  const addToCart = (cart: ShoppingCart) => {
+    props.actions.addToCart(cart);
+  };
 
   function prevNextButtonsRender(
     current: number,
@@ -30,6 +40,7 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
   }
 
   function getChunkArrayForShoppingItems(): Item[][] {
+    console.log(props);
     return chunk(props.items, 16);
   }
 
@@ -92,7 +103,7 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
               xxl={{ span: 6 }}
               lg={{ span: 6 }}
             >
-              <Card bordered={false}>
+              <Card key={product.slug} bordered={false}>
                 <Space
                   direction="vertical"
                   style={{ display: "flex", alignItems: "center" }}
@@ -116,6 +127,13 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
                       color: "white",
                     }}
                     type="text"
+                    onClick={() =>
+                      addToCart({
+                        quantity: 1,
+                        item: product,
+                        totalPrice: product.price,
+                      })
+                    }
                   >
                     Add
                   </Button>
@@ -140,4 +158,16 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
   );
 };
 
-export default Products;
+const mapStateToProps = (state: State) => {
+  return {};
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    actions: {
+      addToCart: bindActionCreators(addToCart, dispatch),
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Products);

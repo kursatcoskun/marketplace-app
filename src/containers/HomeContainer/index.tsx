@@ -2,10 +2,8 @@ import { Button, Col, List, Row } from "antd";
 import "antd/dist/antd.css";
 import { HomeLayoutRow } from "./HomeLayoutRow";
 import SortingTypeSelection from "./SortingTypeSelection";
-import { Selection } from "../../core/models/Selection";
 import FilterSelection from "./FilterSelection";
 import { ShoppingCartCard } from "./ShoppingCartCard";
-import { CartItem } from "../../core/models/CartItem";
 import Text from "antd/lib/typography/Text";
 import { Space } from "antd";
 import { Divider } from "antd";
@@ -15,14 +13,21 @@ import { getAllCompanies } from "../../core/redux/actions/CompanyActions";
 import { connect } from "react-redux";
 import { useEffect } from "react";
 import { Company } from "../../core/models/Company";
-import { getAllShoppingItems } from "../../core/redux/actions/ShoppingActions";
+import {
+  addToCart,
+  getAllShoppingItems,
+  removeToCart,
+} from "../../core/redux/actions/ShoppingActions";
 import { Item } from "../../core/models/Item";
 import * as _ from "lodash";
+import { State } from "../../core/models/State";
+import { ShoppingCart } from "../../core/models/ShoppingCart";
 
 export interface HomeContainerProps {
   actions: any;
   companies: Company[];
   shoppingItems: Item[];
+  shoppingCartItems: ShoppingCart[];
 }
 
 const HomeContainer: React.FunctionComponent<HomeContainerProps> = (props) => {
@@ -39,76 +44,25 @@ const HomeContainer: React.FunctionComponent<HomeContainerProps> = (props) => {
     props.actions.getItems();
   };
 
+  const getTotalPrice = () => {
+    return props.shoppingCartItems
+      ?.reduce((pv, cv) => pv + (cv.totalPrice || 0), 0)
+      .toFixed(2);
+  };
+
+  const addToCart = (cart: ShoppingCart) => {
+    props.actions.addToCart(cart);
+  };
+
+  const removeToCart = (cart: ShoppingCart) => {
+    props.actions.removeToCart(cart);
+  };
+
   function getFlattenTags() {
     const tags = props.shoppingItems.map((item) => item.tags).flat();
     return _.uniq(tags);
   }
 
-  const options: Selection[] = [
-    {
-      id: 1,
-      label: "sample",
-      selected: false,
-      shortCode: "",
-    },
-    {
-      id: 2,
-      label: "sample 2",
-      selected: false,
-      shortCode: "",
-    },
-    {
-      id: 3,
-      label: "sample 3",
-      selected: false,
-      shortCode: "",
-    },
-    {
-      id: 4,
-      label: "sample 4",
-      selected: false,
-      shortCode: "",
-    },
-    {
-      id: 5,
-      label: "sample 5",
-      selected: false,
-      shortCode: "",
-    },
-    {
-      id: 6,
-      label: "sample 6",
-      selected: false,
-      shortCode: "",
-    },
-  ];
-
-  const cartItems: CartItem[] = [
-    {
-      id: 1,
-      label: "Sample Product",
-      price: 10,
-      quantity: 2,
-    },
-    {
-      id: 2,
-      label: "Sample Product",
-      price: 10,
-      quantity: 2,
-    },
-    {
-      id: 3,
-      label: "Sample Product",
-      price: 10,
-      quantity: 2,
-    },
-    {
-      id: 4,
-      label: "Sample Product",
-      price: 10,
-      quantity: 2,
-    },
-  ];
   return (
     <HomeLayoutRow>
       <Col
@@ -133,7 +87,7 @@ const HomeContainer: React.FunctionComponent<HomeContainerProps> = (props) => {
         <FilterSelection
           title="Tags"
           inputPlaceholder="Search tag"
-          options={getFlattenTags().map((tag,index) => ({
+          options={getFlattenTags().map((tag, index) => ({
             id: index,
             label: tag,
             shortCode: tag,
@@ -164,8 +118,8 @@ const HomeContainer: React.FunctionComponent<HomeContainerProps> = (props) => {
             style={{ width: "100%" }}
             itemLayout="horizontal"
             bordered={false}
-            dataSource={cartItems}
-            renderItem={(item) => (
+            dataSource={props?.shoppingCartItems}
+            renderItem={(cart) => (
               <List.Item style={{ display: "flex", justifyContent: "center" }}>
                 <Row style={{ justifyContent: "center" }}>
                   <Col
@@ -177,9 +131,9 @@ const HomeContainer: React.FunctionComponent<HomeContainerProps> = (props) => {
                     xxl={{ span: 17, offset: 1 }}
                   >
                     <Space direction="vertical">
-                      <Text>{item.label}</Text>
+                      <Text>{cart?.item?.name}</Text>
                       <Text style={{ color: "#1ea4ce", fontWeight: "bold" }}>
-                        &#8378;{item.price}
+                        &#8378;{cart?.totalPrice}
                       </Text>
                     </Space>
                   </Col>
@@ -194,6 +148,13 @@ const HomeContainer: React.FunctionComponent<HomeContainerProps> = (props) => {
                     <Button
                       type="text"
                       style={{ color: "#1ea4ce", fontWeight: "bold" }}
+                      onClick={() =>
+                        removeToCart({
+                          quantity: -1,
+                          item: cart.item,
+                          totalPrice: cart.item.price,
+                        })
+                      }
                     >
                       -
                     </Button>
@@ -205,7 +166,7 @@ const HomeContainer: React.FunctionComponent<HomeContainerProps> = (props) => {
                         cursor: "unset",
                       }}
                     >
-                      {item.quantity}
+                      {cart?.quantity}
                     </Button>
                     <Button
                       style={{
@@ -213,6 +174,13 @@ const HomeContainer: React.FunctionComponent<HomeContainerProps> = (props) => {
                         fontWeight: "bold",
                       }}
                       type="text"
+                      onClick={() =>
+                        addToCart({
+                          quantity: 1,
+                          item: cart.item,
+                          totalPrice: cart.item.price,
+                        })
+                      }
                     >
                       +
                     </Button>
@@ -231,7 +199,7 @@ const HomeContainer: React.FunctionComponent<HomeContainerProps> = (props) => {
                 cursor: "unset",
               }}
             >
-              &#8378;39,97
+              &#8378;{getTotalPrice()}
             </Button>
           </Row>
         </ShoppingCartCard>
@@ -240,10 +208,11 @@ const HomeContainer: React.FunctionComponent<HomeContainerProps> = (props) => {
   );
 };
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: State) => {
   return {
     companies: state.company.companies,
     shoppingItems: state.shoppingItem.items,
+    shoppingCartItems: state.shoppingItem.shoppingCart,
   };
 };
 
@@ -252,6 +221,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     actions: {
       getCompanies: bindActionCreators(getAllCompanies, dispatch),
       getItems: bindActionCreators(getAllShoppingItems, dispatch),
+      addToCart: bindActionCreators(addToCart, dispatch),
+      removeToCart: bindActionCreators(removeToCart, dispatch),
     },
   };
 };

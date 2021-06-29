@@ -1,5 +1,5 @@
 export interface Action<T> {
   payload: T;
-  loading: boolean;
+  loading?: boolean;
   type: string;
 }
