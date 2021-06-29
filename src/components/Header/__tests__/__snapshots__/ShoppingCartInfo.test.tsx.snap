@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ShoppingCartInfoComponent should render initial layout 1`] = `
+Array [
+  <styled.div>
+    <ForwardRef(ShoppingCartOutlined)
+      style={
+        Object {
+          "fontSize": "200%",
+        }
+      }
+    />
+    <Styled(Text)>
+      ₺
+      1111
+    </Styled(Text)>
+  </styled.div>,
+]
+`;

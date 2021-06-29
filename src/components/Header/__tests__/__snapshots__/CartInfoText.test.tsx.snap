@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CartInfoTextComponent should render initial layout 1`] = `
+Array [
+  <Text
+    className="sc-bdnxRM jmGxms"
+  />,
+]
+`;
