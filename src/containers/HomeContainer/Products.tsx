@@ -103,7 +103,6 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
           <Button
             key={productType}
             onClick={() => clickProductType(productType)}
-            type="text"
             style={{
               marginLeft: "10px",
               backgroundColor:
