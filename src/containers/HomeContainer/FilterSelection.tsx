@@ -41,6 +41,14 @@ const FilterSelection: React.FunctionComponent<FilterSelectionProps> = (
             props.selectedTagFilter?.filters.length
             ? [...props.selectedTagFilter?.filters, item.shortCode]
             : [item.shortCode]
+          : props.selectedTagFilter &&
+            props.selectedTagFilter?.filters &&
+            props.selectedTagFilter?.filters.length > 1
+          ? [
+              props.selectedTagFilter?.filters.filter(
+                (x) => x === item.shortCode
+              ),
+            ]
           : [],
       });
     }
@@ -53,6 +61,14 @@ const FilterSelection: React.FunctionComponent<FilterSelectionProps> = (
             props.selectedBrandFilter?.filters.length
             ? [...props.selectedBrandFilter?.filters, item.shortCode]
             : [item.shortCode]
+          : props.selectedBrandFilter &&
+            props.selectedBrandFilter?.filters &&
+            props.selectedBrandFilter?.filters.length > 1
+          ? [
+              props.selectedBrandFilter?.filters.filter(
+                (x) => x === item.shortCode
+              ),
+            ]
           : [],
       });
     }

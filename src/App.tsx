@@ -10,7 +10,7 @@ function App() {
     <div className="app">
       <HeaderLayout title="Market" />
       <HomeContainer />
-      <Footer>©2019 Market</Footer>
+      <Footer>©2019 Market &#183; Privacy Policy</Footer>
     </div>
   );
 }
