@@ -101,6 +101,7 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
       >
         {props.productTypes?.map((productType) => (
           <Button
+            key={productType}
             onClick={() => clickProductType(productType)}
             type="text"
             style={{
@@ -122,6 +123,7 @@ const Products: React.FunctionComponent<ProductsProps> = (props) => {
         <ProductListLayout>
           {getChunkArrayForShoppingItems()[page]?.map((product) => (
             <Col
+              key={product.slug}
               xs={{ span: 12 }}
               sm={{ span: 12 }}
               xl={{ span: 6 }}
