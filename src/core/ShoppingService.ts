@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiUrl = "http://localhost:3001";
+const apiUrl = "https://json-server-marketplace-app.herokuapp.com";
 
 export function getItems() {
   return axios.get(`${apiUrl}/items`);
