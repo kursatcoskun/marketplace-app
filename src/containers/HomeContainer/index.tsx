@@ -1,27 +1,25 @@
-import { Button, Col, List, Row } from "antd";
+import { Button, Col, Divider, List, Row, Space } from "antd";
 import "antd/dist/antd.css";
-import { HomeLayoutRow } from "./HomeLayoutRow";
-import SortingTypeSelection from "./SortingTypeSelection";
-import FilterSelection from "./FilterSelection";
-import { ShoppingCartCard } from "./ShoppingCartCard";
 import Text from "antd/lib/typography/Text";
-import { Space } from "antd";
-import { Divider } from "antd";
-import Products from "./Products";
-import { bindActionCreators, Dispatch } from "redux";
-import { getAllCompanies } from "../../core/redux/actions/CompanyActions";
-import { connect } from "react-redux";
+import * as _ from "lodash";
 import { useEffect } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators, Dispatch } from "redux";
 import { Company } from "../../core/models/Company";
+import { Item } from "../../core/models/Item";
+import { ShoppingCart } from "../../core/models/ShoppingCart";
+import { State } from "../../core/models/State";
+import { getAllCompanies } from "../../core/redux/actions/CompanyActions";
 import {
   addToCart,
   getAllShoppingItems,
   removeToCart,
 } from "../../core/redux/actions/ShoppingActions";
-import { Item } from "../../core/models/Item";
-import * as _ from "lodash";
-import { State } from "../../core/models/State";
-import { ShoppingCart } from "../../core/models/ShoppingCart";
+import FilterSelection from "./FilterSelection";
+import { HomeLayoutRow } from "./HomeLayoutRow";
+import Products from "./Products";
+import { ShoppingCartCard } from "./ShoppingCartCard";
+import SortingTypeSelection from "./SortingTypeSelection";
 
 export interface HomeContainerProps {
   actions: any;
